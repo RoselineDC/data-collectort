@@ -13,7 +13,7 @@
 
 ---
 
-## 🚀 Overview
+## Overview
 
 This platform solves a major problem faced by developers and agencies:
 
@@ -28,7 +28,7 @@ This system centralizes and structures the entire onboarding workflow.
 
 ---
 
-# ✨ Features
+#  Features
 
 ## Developer Features
 - Authentication
@@ -48,7 +48,7 @@ This system centralizes and structures the entire onboarding workflow.
 
 ---
 
-# 🧠 Core Concept
+# Core Concept
 
 Developers create projects and generate public form links.
 
@@ -68,7 +68,7 @@ All data is stored in a centralized dashboard.
 
 ---
 
-# 🏗️ Tech Stack
+#  Tech Stack
 
 | Category | Technology |
 |---|---|
@@ -82,7 +82,7 @@ All data is stored in a centralized dashboard.
 
 ---
 
-# ⚡ Dynamic Form Engine
+#  Dynamic Form Engine
 
 Instead of hardcoded forms:
 
@@ -100,7 +100,7 @@ This makes the system scalable across industries.
 
 ---
 
-# 📦 Example Use Cases
+#  Example Use Cases
 
 ## Printer Shops
 - Product catalogs
@@ -122,7 +122,7 @@ This makes the system scalable across industries.
 
 ---
 
-# 📂 Project Structure
+# Project Structure
 
 ```txt
 app/
@@ -143,7 +143,7 @@ lib/
 
 ---
 
-# 🔐 Environment Variables
+#  Environment Variables
 
 ```env
 DATABASE_URL=
@@ -154,7 +154,7 @@ CLOUDINARY_URL=
 
 ---
 
-# 🛠️ Installation
+#  Installation
 
 ## Clone Repository
 
@@ -176,7 +176,7 @@ npm run dev
 
 ---
 
-# 🎯 MVP Goals
+#  MVP Goals
 
 - Dynamic forms
 - File uploads
@@ -186,7 +186,7 @@ npm run dev
 
 ---
 
-# 🔮 Future Features
+#  Future Features
 
 - AI content generation
 - OCR extraction
@@ -196,12 +196,12 @@ npm run dev
 
 ---
 
-# 📄 License
+#  License
 
 MIT License
 
 ---
 
-# 👨‍💻 Author
+#  Author
 
 Built for developers tired of chaotic client onboarding workflows.
