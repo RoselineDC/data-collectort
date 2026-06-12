@@ -1,26 +1,312 @@
 @import "tailwindcss";
 
 :root {
+  --primary: #7ac943;
+  --primary-dark: #67b237;
+
+  --text: #111111;
+  --text-light: #6b7280;
+
   --background: #ffffff;
-  --foreground: #171717;
+  --background-soft: #f5f6f7;
+
+  --border: #e5e7eb;
+
+  --footer: #111111;
+
+  --radius: 16px;
+  --container: 1280px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+background: var(--background);
+color: var(--text);
+font-family:
+Inter,
+ui-sans-serif,
+system-ui,
+sans-serif;
+}
+
+/* ==========================
+Layout
+========================== */
+
+.container-custom {
+width: 100%;
+max-width: var(--container);
+margin-inline: auto;
+padding-inline: 1rem;
+}
+
+.section {
+padding: 5rem 0;
+}
+
+.section-light {
+background: var(--background-soft);
+}
+
+/* ==========================
+Typography
+========================== */
+
+.section-label {
+color: var(--primary);
+font-size: 0.875rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.08em;
+}
+
+.section-title {
+font-size: clamp(2rem, 5vw, 3rem);
+font-weight: 800;
+line-height: 1.1;
+color: var(--text);
+}
+
+.section-title span {
+color: var(--primary);
+}
+
+.section-description {
+color: var(--text-light);
+max-width: 700px;
+margin-top: 1rem;
+line-height: 1.8;
+}
+
+/* ==========================
+Buttons
+========================== */
+
+
+.btn-primary:hover {
+background: var(--primary-dark);
+transform: translateY(-2px);
+}
+
+.btn-primary {
+  align-items: center;
+  gap: 0.5rem;
+
+  background: var(--primary);
+  color: white;
+
+  padding: 0.9rem 1.75rem;
+
+  border-radius: 0.5rem;
+
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+background: var(--primary);
+color: white;
+}
+
+/* ==========================
+Cards
+========================== */
+
+.card {
+background: white;
+border: 1px solid var(--border);
+border-radius: 0.75rem;
+overflow: hidden;
+transition: all 0.3s ease;
+}
+
+.card:hover {
+transform: translateY(-4px);
+box-shadow:
+0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.card-image {
+position: relative;
+height: 220px;
+overflow: hidden;
+}
+
+.card-image img {
+transition: transform 0.4s ease;
+}
+
+.card:hover img {
+transform: scale(1.05);
+}
+
+.card-content {
+padding: 1.5rem;
+}
+
+/* ==========================
+Solution Cards
+========================== */
+
+.solution-card {
+background: white;
+border: 1px solid var(--border);
+border-radius: 0.75rem;
+overflow: hidden;
+transition: all 0.3s ease;
+}
+
+.solution-card:hover {
+transform: translateY(-5px);
+box-shadow:
+0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.solution-icon {
+width: 52px;
+height: 52px;
+
+border-radius: 9999px;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+border: 1px solid var(--primary);
+
+color: var(--primary);
+
+transition: all 0.3s ease;
+}
+
+.solution-card:hover .solution-icon {
+background: var(--primary);
+color: white;
+}
+
+/* ==========================
+Stats
+========================== */
+
+.stat-card {
+background: white;
+border: 1px solid var(--border);
+border-radius: 0.75rem;
+padding: 2rem;
+text-align: center;
+}
+
+.stat-value {
+color: var(--primary);
+font-size: 2rem;
+font-weight: 800;
+}
+
+.stat-label {
+margin-top: 0.5rem;
+color: var(--text-light);
+font-size: 0.8rem;
+font-weight: 600;
+}
+
+/* ==========================
+Brands
+========================== */
+
+
+
+.brand-logo {
+opacity: 1;
+transform: scale(1.05);
+}
+
+/* ==========================
+Testimonials
+========================== */
+
+.testimonial-card {
+background: white;
+border: 1px solid var(--border);
+border-radius: 1rem;
+padding: 2rem;
+}
+
+.testimonial-quote {
+color: var(--primary);
+font-size: 3rem;
+line-height: 1;
+}
+
+/* ==========================
+Footer
+========================== */
+
+.footer {
+background: var(--footer);
+color: white;
+}
+
+.footer-link {
+color: rgba(255,255,255,0.7);
+transition: 0.3s;
+}
+
+.footer-link:hover {
+color: var(--primary);
+}
+
+/* ==========================
+Animations
+========================== */
+
+.fade-up {
+animation: fadeUp 0.8s ease forwards;
+}
+
+@keyframes fadeUp {
+from {
+opacity: 0;
+transform: translateY(24px);
+}
+
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* ==========================
+Scrollbar
+========================== */
+
+::-webkit-scrollbar {
+width: 10px;
+}
+
+::-webkit-scrollbar-track {
+background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+background: var(--primary);
+border-radius: 999px;
+}
+
+/* ==========================
+Responsive
+========================== */
+
+@media (max-width: 768px) {
+.section {
+padding: 4rem 0;
+}
+
+.section-title {
+font-size: 2rem;
+}
 }
