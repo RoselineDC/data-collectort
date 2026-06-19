@@ -90,24 +90,32 @@ export default function HeroCarousel() {
         if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
       }}
     >
-      <div className="flex min-h-[420px] md:min-h-[480px]">
+      <div className="flex min-h-[460px] md:min-h-[520px]">
 
         {/* Left — green text panel */}
         <div className="bg-[#7ac943] flex-1 flex flex-col justify-center px-10 py-14 md:px-16 md:py-16 relative z-10">
-          <div className="inline-flex w-fit items-center bg-black text-white text-xs font-semibold rounded-full px-3 py-1 mb-6 tracking-wide">
+
+          {/* Tag pill */}
+          <div className="inline-flex w-fit items-center bg-black text-white text-xs font-bold rounded-full px-4 py-1.5 mb-7 tracking-widest uppercase">
             {slide.tag}
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4 max-w-sm">
+
+          {/* Title — font-black for maximum punch on green */}
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-5 max-w-sm drop-shadow-sm">
             {slide.title}
           </h2>
-          <p className="text-white/85 text-sm md:text-base leading-relaxed mb-8 max-w-xs">
+
+          {/* Description — full white, larger */}
+          <p className="text-white text-base md:text-lg leading-relaxed mb-10 max-w-sm opacity-90">
             {slide.description}
           </p>
+
+          {/* CTAs */}
           <div className="flex flex-wrap items-center gap-3">
-            <button className="bg-white text-gray-900 text-sm font-bold px-6 py-3.5 rounded-full hover:bg-gray-100 transition-colors">
+            <button className="bg-white text-gray-900 text-sm font-bold px-7 py-3.5 rounded-full hover:bg-gray-100 transition-colors">
               {slide.secondaryCta}
             </button>
-            <button className="bg-black text-white text-sm font-bold px-6 py-3.5 rounded-full hover:bg-gray-900 transition-colors flex items-center gap-2">
+            <button className="bg-black text-white text-sm font-bold px-7 py-3.5 rounded-full hover:bg-gray-900 transition-colors flex items-center gap-2">
               {slide.primaryCta}
               <span aria-hidden="true">→</span>
             </button>
@@ -115,38 +123,38 @@ export default function HeroCarousel() {
         </div>
 
         {/* Right — image panel */}
-        <div className="hidden md:block flex-[0_0_45%] relative overflow-hidden">
+        <div className="hidden md:block flex-[0_0_48%] relative overflow-hidden">
           <Image
             src={slide.image}
             alt={slide.tag}
             fill
-            sizes="45vw"
+            sizes="48vw"
             className="object-cover"
             priority={current === 0}
           />
         </div>
       </div>
 
-      {/* Left arrow */}
+      {/* Left arrow — sits at the very left edge */}
       <button
         onClick={() => goTo(current - 1)}
         aria-label="Previous slide"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-700 flex items-center justify-center shadow transition-all text-xl font-bold"
+        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-md transition-all text-2xl leading-none"
       >
         ‹
       </button>
 
-      {/* Right arrow */}
+      {/* Right arrow — sits at the very right edge */}
       <button
         onClick={() => goTo(current + 1)}
         aria-label="Next slide"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-700 flex items-center justify-center shadow transition-all text-xl font-bold"
+        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-md transition-all text-2xl leading-none"
       >
         ›
       </button>
 
-      {/* Bottom dots */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+      {/* Bottom dots — centered across full carousel width */}
+      <div className="absolute bottom-5 left-0 right-0 flex justify-center gap-2 z-20">
         {Array.from({ length: total }).map((_, i) => (
           <button
             key={i}
@@ -154,7 +162,7 @@ export default function HeroCarousel() {
             aria-label={`Go to slide ${i + 1}`}
             className={`rounded-full border-none transition-all duration-300 ${
               i === current
-                ? "w-6 h-2.5 bg-white"
+                ? "w-7 h-2.5 bg-white"
                 : "w-2.5 h-2.5 bg-white/40 hover:bg-white/70"
             }`}
           />
