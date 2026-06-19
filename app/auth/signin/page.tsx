@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -25,7 +25,8 @@ function GitHubLogo() {
   );
 }
 
-export default function SignInPage() {
+/* ── Inner component that uses useSearchParams ── */
+function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const confirmed = searchParams.get("confirmed");
@@ -58,10 +59,7 @@ export default function SignInPage() {
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
-        queryParams: {
-          access_type: "offline",
-          prompt: "consent",
-        },
+        queryParams: { access_type: "offline", prompt: "consent" },
       },
     });
     if (error) setError(error.message);
@@ -71,103 +69,124 @@ export default function SignInPage() {
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
     if (error) setError(error.message);
   }
 
   return (
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+
+      <div className="flex flex-col items-center mb-8">
+        <h1 className="text-xl font-bold text-gray-900">Welcome back</h1>
+        <p className="text-sm text-gray-500 mt-1">Sign in to your account</p>
+      </div>
+
+      {confirmed && (
+        <div className="rounded-lg bg-[#7ac943]/10 border border-[#7ac943]/30 px-4 py-3 text-sm text-[#5a9e30] mb-4 text-center font-medium">
+          Email confirmed! You can now sign in.
+        </div>
+      )}
+
+      {(error || authError) && (
+        <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600 mb-4">
+          {error || "Authentication failed. Please try again."}
+        </div>
+      )}
+
+      <div className="flex flex-row gap-3 mb-6">
+        <button
+          onClick={handleGoogle}
+          className="flex items-center justify-center gap-2 flex-1 border border-gray-200 hover:border-[#7ac943] hover:bg-gray-50 transition-colors rounded-lg px-4 py-3 text-sm font-semibold text-gray-700"
+        >
+          <GoogleLogo />
+          Google
+        </button>
+        <button
+          onClick={handleGitHub}
+          className="flex items-center justify-center gap-2 flex-1 border border-gray-200 hover:border-gray-800 hover:bg-gray-50 transition-colors rounded-lg px-4 py-3 text-sm font-semibold text-gray-700"
+        >
+          <GitHubLogo />
+          GitHub
+        </button>
+      </div>
+
+      <div className="flex items-center gap-3 mb-6">
+        <div className="flex-1 h-px bg-gray-200" />
+        <span className="text-xs text-gray-400 font-medium uppercase tracking-wide">or</span>
+        <div className="flex-1 h-px bg-gray-200" />
+      </div>
+
+      <form onSubmit={handleEmailSignIn} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Email</label>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#7ac943] focus:ring-1 focus:ring-[#7ac943] transition-colors"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Password</label>
+            <Link href="/auth/forgot-password" className="text-xs text-[#7ac943] hover:underline font-medium">
+              Forgot password?
+            </Link>
+          </div>
+          <div className="relative">
+            <input
+              type={showPw ? "text" : "password"}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full border border-gray-200 rounded-lg px-4 py-3 pr-11 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#7ac943] focus:ring-1 focus:ring-[#7ac943] transition-colors"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPw((p) => !p)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-[#7ac943] hover:bg-[#6ab535] disabled:opacity-60 transition-colors text-white text-sm font-bold tracking-wide uppercase px-6 py-3.5 rounded-lg mt-1"
+        >
+          {loading ? "Signing in..." : "Sign In"}
+        </button>
+      </form>
+
+      <p className="text-center text-sm text-gray-500 mt-6">
+        Don&apos;t have an account?{" "}
+        <Link href="/auth/signup" className="text-[#7ac943] font-semibold hover:underline">
+          Sign up free
+        </Link>
+      </p>
+    </div>
+  );
+}
+
+/* ── Page export — wraps form in Suspense ── */
+export default function SignInPage() {
+  return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
-
-          <div className="flex flex-col items-center mb-8">
-            <h1 className="text-xl font-bold text-gray-900">Welcome back</h1>
-            <p className="text-sm text-gray-500 mt-1">Sign in to your account</p>
+        <Suspense fallback={
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center text-sm text-gray-400">
+            Loading...
           </div>
-
-          {/* Confirmed banner */}
-          {confirmed && (
-            <div className="rounded-lg bg-[#7ac943]/10 border border-[#7ac943]/30 px-4 py-3 text-sm text-[#5a9e30] mb-4 text-center font-medium">
-              Email confirmed! You can now sign in.
-            </div>
-          )}
-
-          {/* Error banner */}
-          {(error || authError) && (
-            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600 mb-4">
-              {error || "Authentication failed. Please try again."}
-            </div>
-          )}
-
-          {/* OAuth buttons */}
-          <div className="flex flex-row gap-3 mb-6">
-            <button onClick={handleGoogle}
-              className="flex items-center justify-center gap-2 flex-1 border border-gray-200 hover:border-[#7ac943] hover:bg-gray-50 transition-colors rounded-lg px-4 py-3 text-sm font-semibold text-gray-700">
-              <GoogleLogo />
-              Google
-            </button>
-            <button onClick={handleGitHub}
-              className="flex items-center justify-center gap-2 flex-1 border border-gray-200 hover:border-gray-800 hover:bg-gray-50 transition-colors rounded-lg px-4 py-3 text-sm font-semibold text-gray-700">
-              <GitHubLogo />
-              GitHub
-            </button>
-          </div>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400 font-medium uppercase tracking-wide">or</span>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-
-          {/* Email/password form */}
-          <form onSubmit={handleEmailSignIn} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Email</label>
-              <input type="email" required value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#7ac943] focus:ring-1 focus:ring-[#7ac943] transition-colors"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Password</label>
-                <Link href="/auth/forgot-password" className="text-xs text-[#7ac943] hover:underline font-medium">
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <input type={showPw ? "text" : "password"} required value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full border border-gray-200 rounded-lg px-4 py-3 pr-11 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#7ac943] focus:ring-1 focus:ring-[#7ac943] transition-colors"
-                />
-                <button type="button" onClick={() => setShowPw((p) => !p)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                  {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-            </div>
-
-            <button type="submit" disabled={loading}
-              className="w-full bg-[#7ac943] hover:bg-[#6ab535] disabled:opacity-60 transition-colors text-white text-sm font-bold tracking-wide uppercase px-6 py-3.5 rounded-lg mt-1">
-              {loading ? "Signing in..." : "Sign In"}
-            </button>
-          </form>
-
-          <p className="text-center text-sm text-gray-500 mt-6">
-            Don&apos;t have an account?{" "}
-            <Link href="/auth/signup" className="text-[#7ac943] font-semibold hover:underline">
-              Sign up free
-            </Link>
-          </p>
-
-        </div>
+        }>
+          <SignInForm />
+        </Suspense>
       </div>
     </div>
   );
